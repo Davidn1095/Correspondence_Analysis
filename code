@@ -1,0 +1,76 @@
+# Load data from a text file into the 'datos' DataFrame
+datos <- read.table("correspondencias.txt", header = TRUE)
+# Display the loaded data
+datos
+
+# Perform a Chi-squared test of independence on the 'datos' dataset
+chisq.test(datos)
+
+# Perform Correspondence Analysis on the 'datos' dataset
+acs <- dudi.coa(datos)
+# Display the results of Correspondence Analysis
+acs
+
+# Create a scree plot showing eigenvalues/inertia from the Correspondence Analysis
+fviz_screeplot(acs, addlabels = TRUE, ylim = c(0, 70))
+
+# Access various results from the Correspondence Analysis
+# Row weights
+acs$lw
+# Column weights
+acs$cw
+# Row coordinates
+acs$li
+# Row coordinates (alternate notation)
+acs$l1
+# Column coordinates
+acs$co
+# Column coordinates (alternate notation)
+acs$c1
+
+# Create biplots in different styles to visualize relationships from Correspondence Analysis
+fviz_ca_biplot(acs)
+fviz_ca_biplot(acs, map = "rowprincipal", arrow = c(TRUE, TRUE))
+fviz_ca_biplot(acs, map = "colprincipal", arrow = c(TRUE, TRUE))
+
+# Load the 'DogBreeds' dataset
+data("DogBreeds")
+# Display the 'DogBreeds' dataset
+DogBreeds
+
+# Select specific columns from 'DogBreeds' for analysis
+Datosrazas <- DogBreeds[, -7]
+# Display a summary of the selected columns
+summary(Datosrazas)
+
+# Define the number of rows and columns for analysis
+p <- 16
+s <- 6
+# Calculate the total number of intervals
+Intotal <- (p / s) - 1
+# Display the calculated total number of intervals
+Intotal
+
+# Perform Multiple Correspondence Analysis (MCA) on the 'Datosrazas' dataset
+acm <- dudi.acm(Datosrazas, nf = 10, scannf = FALSE)
+# Display a summary of the MCA results
+summary(acm)
+
+# Create a scree plot for the MCA eigenvalues
+fviz_screeplot(acm, addlabels = TRUE, ylim = c(0, 35))
+
+# Access row and column coordinates from MCA
+acm$li
+acm$co
+
+# Create visualizations for MCA results, including individual and biplots
+fviz_mca_ind(acm)
+fviz_mca_biplot(acm)
+
+# Visualize variable contributions for MCA results
+fviz_contrib(acm, choice = "var", axes = c(1, 2), fill = "blue")
+
+# Create variable plots for MCA results with gradient color schemes
+fviz_mca_var(acm, axes = c(1, 2), choice = "var.cat", repel = T, gradient.cols = c("yellow", "orange", "red", "blue", "black"), col.var = "contrib")
+fviz_mca_var(acm, axes = c(1, 3), choice = "var.cat", repel = T, gradient.cols = c("yellow", "orange", "red", "blue", "black"), col.var = "contrib")
+fviz_mca_var(acm, axes = c(2, 3), choice = "var.cat", repel = T, gradient.cols = c("yellow", "orange", "red", "blue", "black"), col.var = "contrib")
